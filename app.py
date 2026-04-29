@@ -56,24 +56,26 @@ with col2:
                 try:
                     val = float(str(target_str).split(' / ')[0]) if '/' in str(target_str) else 20.0
                 except:
-                    val = 20.0
+                    val = 24.0
                 
                 with st.expander(f"📌 {sub} | Target: {target_str}"):
-                    if val > 50:
+                    if val > 55:
                         st.error(f"🔴 **STATUS: CRITICAL**")
                         st.write(f"**Target:** You need {val} marks out of 60. This requires extreme focus.")
                         st.write("- **Action:** Solve the last 5 years of University Question Papers.")
                         st.write("- **Study Time:** Minimum 3+ hours daily.")
-                    elif val > 35:
+                    elif val > 45:
                         st.warning(f"🟡 **STATUS: MODERATE**")
                         st.write(f"**Target:** You need {val} marks. This is achievable with steady effort.")
                         st.write("- **Action:** Prioritize numerical problems and high-weightage chapters.")
                         st.write("- **Study Time:** 1.5 to 2 hours daily.")
-                    else:
+                    elif val > 30:
                         st.success(f"🟢 **STATUS: SAFE**")
                         st.write(f"**Target:** You need {val} marks. You are in a strong position.")
                         st.write("- **Action:** Focus on maintaining your current grasp; avoid silly mistakes.")
                         st.write("- **Study Time:** 45 minutes of revision daily.")
+                    else:
+                        st.success(f"🟢 **STATUS: SAFE**")
 
 st.markdown("---")
 st.caption("Powered by Data Science | Developed for Parul University Engineering Students")

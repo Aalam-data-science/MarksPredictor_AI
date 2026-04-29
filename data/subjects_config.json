@@ -1,6 +1,6 @@
 {
   "branches": {
-    "AI & Data Science": ["Foundation of AI-ML", "Objected Oriented Programming", "Physics of Semiconductors", "ICT Workshop", "Advanced Communication and Interpersonal Skills"],
+    "AI & Data Science": ["Foundation of AI-ML", "Objected Oriented Programming", "Physics of Semiconductors", "Linear Algebra", "PSOSM", "ICT Workshop", "Advanced Communication and Interpersonal Skills"],
     "AI & Machine Learning": ["PYTHON PROGRAMMING", "Objected Oriented Programming", "Electrical and Electronics Engineering", "ICT Workshop", "Advanced Communication and Interpersonal Skills"],
     "Computer Science (CSE)": ["Cloud Foundation", "Objected Oriented Programming", "Physics of Semiconductors", "ICT Workshop", "Advanced Communication and Interpersonal Skills"],
     "Information Technology": ["Python Programming", "Physics of Semiconductors", "ICT Workshop", "Advanced Communication and Interpersonal Skills"],
@@ -19,7 +19,9 @@
     "Operating system and Platform Security": {"max_marks": 150, "credits": 4, "has_practical": true},
     "Advanced Communication and Interpersonal Skills": {"max_marks": 150, "credits": 2, "has_practical": true},
     "ICT Workshop": {"max_marks": 50, "credits": 1, "has_practical": true},
-    "Linear Algebra": {"max_marks": 100, "credits": 4, "has_practical": false}
+    "Linear Algebra": {"max_marks": 100, "credits": 4, "has_practical": false},
+    "PSOSM": {"max_marks": 100, "credits": 3, "has_practical": false}
+  
   },
   "defaults": {
     "internal_avg": 16.5,

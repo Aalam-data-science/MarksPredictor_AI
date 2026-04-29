@@ -2,33 +2,54 @@ def predict_needed_marks(target_sgpa, mid_sem_data, subjects_config, defaults):
     # Total credits calculate karna
     total_credits = sum(s['credits'] for s in subjects_config.values() if s['credits'] > 0)
     
+    # Total credits calculate karna
+    total_credits = sum(s['credits'] for s in subjects_config.values() if s['credits'] > 0)
+    
     predictions = {}
     
+    # Parul University SGPA to Percentage approx formula: (SGPA - 0.5) * 10
+    target_percentage = (target_sgpa - 0.5) * 10
+    
     for sub, info in subjects_config.items():
-        # Current internal marks (Avg 16.5)
-        current_marks = defaults['internal_avg']
+        mid_sem = mid_sem_data.get(sub, 25.0) # Default 25 if not provided
         
-        # 1. 150 Marks wale subjects (AIML, OOPS, Physics, Adv. Comm)
+        # --- AAPKA CUSTOM ML LOGIC ---
+        # 35+ Mid-sem -> 45+ Internal/Practical
+        if mid_sem >= 35:
+            est_internal_prac = 46.0
+        # 30+ Mid-sem -> 40+ Internal/Practical
+        elif mid_sem >= 30:
+            est_internal_prac = 41.0
+        # Minimum 35 se niche nahi jayega (even for 16 mid-sem)
+        else:
+            est_internal_prac = 35.0
+            
+        # 1. 150 Marks wale subjects (End Sem = 60)
         if info['max_marks'] == 150:
-            mid_sem = mid_sem_data.get(sub, 0)
-            prac = defaults['practical_avg'] # 24 average
-            current_total = current_marks + mid_sem + prac
-            # End sem 60 mein se kitne chahiye (Targeting 80% for safe side)
-            needed = (info['max_marks'] * 0.8) - current_total
-            predictions[sub] = f"{max(0, round(needed, 2))} / 60"
+            # Formula: Total Needed = (Target% * 150 / 100)
+            total_needed = (target_percentage * 150) / 100
+            current_have = mid_sem + est_internal_prac
+            needed_in_endsem = total_needed - current_have
+            
+            # Capping: 60 se upar nahi jana chahiye
+            final_target = min(60, max(24, round(needed_in_endsem, 2))) # 24 is passing (40%)
+            predictions[sub] = f"{final_target} / 60"
 
-        # 2. 100 Marks wale subjects (Linear Algebra, PSOSM)
+        # 2. 100 Marks wale subjects (Maths/PSOSM - End Sem = 60 or 40)
         elif info['max_marks'] == 100:
-            mid_sem = mid_sem_data.get(sub, 0)
-            current_total = current_marks + mid_sem # No practical here
-            needed = (info['max_marks'] * 0.8) - current_total
-            predictions[sub] = f"{max(0, round(needed, 2))} / 40" # End sem is often 40 or 60 check booklet
+            total_needed = (target_percentage * 100) / 100
+            # 100 marks mein practical nahi hota, only Internal (40) + EndSem (60)
+            # Mid-sem is part of internal
+            current_internal = (mid_sem/40)*20 + 15 # Approx internal logic
+            needed_in_endsem = total_needed - current_internal
+            
+            final_target = min(60, max(24, round(needed_in_endsem, 2)))
+            predictions[sub] = f"{final_target} / 60"
 
-        # 3. 50 Marks wale subjects (ICT, EVS) - Fix is here!
+        # 3. 50 Marks wale subjects (ICT)
         elif info['max_marks'] == 50:
-            # ICT/EVS mein mid-sem nahi hota, mostly practical/viva hota hai (30 marks)
-            # Internal (20) + Practical/Viva (30) = 50
-            needed_in_viva = (50 * 0.8) - current_marks # 40 marks target - 16.5 internal
-            predictions[sub] = f"{max(0, round(needed_in_viva, 2))} / 30 (Viva/Prac)"
+            total_needed = (target_percentage * 50) / 100
+            # Mostly Practical based
+            predictions[sub] = f"{max(20, round(total_needed, 2))} / 50 (Total)"
 
     return predictions
